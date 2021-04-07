@@ -10,6 +10,7 @@ namespace Domain.Entities
         public string PersonalNumber { get; private set; }
         public string BankAccountNumber { get; private set; }
         public string BankPinNumber { get; private set; }
+        public DateTime CreationDate { get; private set; }
 
         public User() { }
 
@@ -21,6 +22,7 @@ namespace Domain.Entities
             SetPersonalNumber(personalNumber);
             SetBankAccountNumber(bankAccountNumber);
             SetBankPinNumber(bankPinNumber);
+            CreationDate = DateTime.Now;
         }
 
         private void SetFirstName(string firstName)
