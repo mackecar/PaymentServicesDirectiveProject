@@ -10,6 +10,7 @@ namespace Domain.Entities
         public string PersonalNumber { get; private set; }
         public string BankAccountNumber { get; private set; }
         public string BankPinNumber { get; private set; }
+        public string UserPass { get; private set; }
         public DateTime CreationDate { get; private set; }
 
         public User() { }
@@ -70,6 +71,11 @@ namespace Domain.Entities
             }
 
             return true;
+        }
+
+        public void SetUserPass(string userPass)
+        {
+            UserPass = userPass;
         }
     }
 }
