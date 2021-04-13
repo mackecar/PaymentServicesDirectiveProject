@@ -13,6 +13,7 @@ namespace Domain.Entities
         public string BankPinNumber { get; private set; }
         public string UserPass { get; private set; }
         public DateTime CreationDate { get; private set; }
+        public decimal Amount { get; private set; } 
 
         public User() { }
 
@@ -30,6 +31,7 @@ namespace Domain.Entities
             SetBankAccountNumber(bankAccountNumber);
             SetBankPinNumber(bankPinNumber);
             CreationDate = DateTime.Now;
+            Amount = 0;
         }
 
         private void SetFirstName(string firstName)
@@ -88,6 +90,16 @@ namespace Domain.Entities
         public void SetUserPass(string userPass)
         {
             UserPass = userPass;
+        }
+
+        public void Deposit(decimal amount)
+        {
+            Amount += amount;
+        }
+
+        public void Withdraw(decimal amount)
+        {
+            Amount -= amount;
         }
     }
 }

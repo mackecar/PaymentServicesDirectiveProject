@@ -16,6 +16,7 @@ namespace Domain.DTOs
         public string BankPinNumber { get;  set; }
         public string UserPass { get;  set; }
         public DateTime CreationDate { get;  set; }
+        public decimal Amount { get;  set; }
 
         public UserDto() { }
 
@@ -30,6 +31,7 @@ namespace Domain.DTOs
             BankPinNumber = user.BankPinNumber;
             UserPass = user.UserPass;
             CreationDate = user.CreationDate;
+            Amount = user.Amount;
         }
     }
 }
