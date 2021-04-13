@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ApplicationService.Extensions;
+using Banks.ApplicationServiceInterfaces;
+using Banks.ApplicationServiceInterfaces.DTOs;
 using Domain.DTOs;
 using Domain.Entities;
 using Domain.Repositories;
@@ -12,15 +14,17 @@ namespace Domain.ApplicationService
 {
     public class UserService
     {
-        private readonly IUserRepository UserRepository;
-        private readonly IUnitOfWork UnitOfWork;
-        private readonly IUnitOfWorkFactory UnitOfWorkFactory;
+        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IBankServiceProvider _bankServiceProvider;
 
-        public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, IUnitOfWorkFactory unitOfWorkFactory)
+        public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, IUnitOfWorkFactory unitOfWorkFactory, IBankServiceProvider bankServiceProvider)
         {
-            UserRepository = userRepository;
-            UnitOfWork = unitOfWork;
-            UnitOfWorkFactory = unitOfWorkFactory;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _bankServiceProvider = bankServiceProvider;
         }
 
         public async Task<UserDto> CreateUser(string firstName, 
@@ -30,10 +34,14 @@ namespace Domain.ApplicationService
             string bankAccountNumber,
             string bankPinNumber)
         {
-            using IUnitOfWork unitOfWork = UnitOfWorkFactory.CreateUnitOfWork();
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
 
             bool doesExist = await DoesExist(personalNumber);
             if(doesExist)throw new Exception("User already exist!");
+
+            IBankService bank = _bankServiceProvider.Get(bankName);
+            CheckStatusDto status = await bank.CheckStatusAsync(personalNumber, bankPinNumber);
+            if(!status.Status) throw new Exception(status.Message);
             
             User user = new User(firstName,lastName,personalNumber,bankName,bankAccountNumber,bankPinNumber);
             string userPass = RandomString(6);
@@ -49,7 +57,7 @@ namespace Domain.ApplicationService
 
         public async Task<UserDto> GetUserByPersonalNumber(string personalNumber)
         {
-            using IUnitOfWork unitOfWork = UnitOfWorkFactory.CreateUnitOfWork();
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
             User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(personalNumber);
             if(user == null) throw new NullReferenceException("User does not exist!");
 
@@ -58,7 +66,7 @@ namespace Domain.ApplicationService
 
         private async Task<bool> DoesExist(string personalNumber)
         {
-            using IUnitOfWork unitOfWork = UnitOfWorkFactory.CreateUnitOfWork();
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
             User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(personalNumber);
             return user != null;
         }
