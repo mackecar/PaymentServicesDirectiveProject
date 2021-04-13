@@ -8,6 +8,7 @@ namespace Domain.Entities
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string PersonalNumber { get; private set; }
+        public string BankName { get; private set; }
         public string BankAccountNumber { get; private set; }
         public string BankPinNumber { get; private set; }
         public string UserPass { get; private set; }
@@ -15,12 +16,17 @@ namespace Domain.Entities
 
         public User() { }
 
-        public User(string firstName, string lastName, string personalNumber, string bankAccountNumber,
+        public User(string firstName, 
+            string lastName, 
+            string personalNumber, 
+            string bankName,
+            string bankAccountNumber,
             string bankPinNumber)
         {
             SetFirstName(firstName);
             SetLastName(lastName);
             SetPersonalNumber(personalNumber);
+            SetBankName(bankName);
             SetBankAccountNumber(bankAccountNumber);
             SetBankPinNumber(bankPinNumber);
             CreationDate = DateTime.Now;
@@ -44,6 +50,12 @@ namespace Domain.Entities
             if(personalNumber.Length != 13) throw new ArgumentException("Personal number must be string of 13 character length!", personalNumber);
             if(!IsPersonAdult(personalNumber)) throw new ArgumentException("Person is not Adult!",personalNumber);
             PersonalNumber = personalNumber;
+        }
+
+        private void SetBankName(string bankName)
+        {
+            if (string.IsNullOrWhiteSpace(bankName)) throw new ArgumentNullException(bankName, "Bank name is empty!");
+            BankName = bankName;
         }
 
         private void SetBankAccountNumber(string bankAccountNumber)

@@ -11,6 +11,7 @@ namespace Domain.DTOs
         public string FirstName { get;  set; }
         public string LastName { get;  set; }
         public string PersonalNumber { get;  set; }
+        public string BankName { get;  set; }
         public string BankAccountNumber { get;  set; }
         public string BankPinNumber { get;  set; }
         public string UserPass { get;  set; }
@@ -24,6 +25,7 @@ namespace Domain.DTOs
             FirstName = user.FirstName;
             LastName = user.LastName;
             PersonalNumber = user.PersonalNumber;
+            BankName = user.BankName;
             BankAccountNumber = user.BankAccountNumber;
             BankPinNumber = user.BankPinNumber;
             UserPass = user.UserPass;

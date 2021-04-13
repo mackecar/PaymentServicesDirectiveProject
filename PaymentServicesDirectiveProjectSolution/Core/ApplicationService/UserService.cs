@@ -26,6 +26,7 @@ namespace Domain.ApplicationService
         public async Task<UserDto> CreateUser(string firstName, 
             string lastName, 
             string personalNumber, 
+            string bankName, 
             string bankAccountNumber,
             string bankPinNumber)
         {
@@ -34,7 +35,7 @@ namespace Domain.ApplicationService
             bool doesExist = await DoesExist(personalNumber);
             if(doesExist)throw new Exception("User already exist!");
             
-            User user = new User(firstName,lastName,personalNumber,bankAccountNumber,bankPinNumber);
+            User user = new User(firstName,lastName,personalNumber,bankName,bankAccountNumber,bankPinNumber);
             string userPass = RandomString(6);
             
             user.SetUserPass(userPass);
