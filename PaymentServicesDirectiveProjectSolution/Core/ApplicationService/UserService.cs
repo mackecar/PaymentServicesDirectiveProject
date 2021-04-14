@@ -37,26 +37,25 @@ namespace Domain.ApplicationService
             string bankAccountNumber,
             string bankPinNumber)
         {
-            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork())
-            {
-                bool doesExist = await DoesExist(personalNumber, unitOfWork);
-                if (doesExist) throw new Exception("User already exist!");
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+            User user = new User(firstName, lastName, personalNumber, bankName, bankAccountNumber, bankPinNumber);
 
-                IBankService bank = _bankServiceProvider.Get(bankName);
-                CheckStatusDto status = await bank.CheckStatusAsync(personalNumber, bankPinNumber);
-                if (!status.Status) throw new Exception(status.Message);
+            bool doesExist = await DoesExist(personalNumber, unitOfWork);
+            if (doesExist) throw new Exception("Korisnik postoji!");
 
-                User user = new User(firstName, lastName, personalNumber, bankName, bankAccountNumber, bankPinNumber);
-                string userPass = RandomString(6);
+            IBankService bank = _bankServiceProvider.Get(bankName);
+            CheckStatusDto status = await bank.CheckStatusAsync(personalNumber, bankPinNumber);
+            if (!status.Status) throw new Exception(status.Message);
 
-                user.SetUserPass(userPass);
+            string userPass = RandomString(6);
 
-                await unitOfWork.UserRepository.InsertAsync(user);
+            user.SetUserPass(userPass);
 
-                await unitOfWork.SaveChangesAsync();
+            await unitOfWork.UserRepository.InsertAsync(user);
 
-                return user.ToUserDto();
-            }
+            await unitOfWork.SaveChangesAsync();
+
+            return user.ToUserDto();
         }
 
         public async Task<UserDto> GetUserByPersonalNumber(string personalNumber)

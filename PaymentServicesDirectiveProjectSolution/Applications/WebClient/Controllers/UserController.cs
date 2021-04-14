@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.ApplicationService;
+using Domain.DTOs;
 using WebClient.Models.ViewModels;
 
 namespace WebClient.Controllers
@@ -30,10 +31,16 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> Registration(UserVM model)
         {
-            await _userService.CreateUser(model.FirstName, model.LastName, model.PersonalNumber, model.BankName,
+            UserDto user = await _userService.CreateUser(model.FirstName, model.LastName, model.PersonalNumber, model.BankName,
                 model.BankAccountNumber, model.BankPinNumber);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("RegistrationSuccess", "User", new { userPass  = user.UserPass});
+        }
+
+        public IActionResult RegistrationSuccess(string userPass)
+        {
+            ViewBag.UserPass = userPass;
+            return View();
         }
     }
 }

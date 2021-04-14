@@ -21,7 +21,9 @@ namespace Banks.ApplicationServices
 
         public IBankService Get(string bankName)
         {
-            return ServiceProvider.GetValueOrDefault(bankName);
+            var bank = ServiceProvider.GetValueOrDefault(bankName);
+            if(bank == null) throw new NullReferenceException($"{bankName} banka nije implementirana!");
+            return bank;
         }
     }
 }

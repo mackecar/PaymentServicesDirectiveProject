@@ -81,7 +81,7 @@ namespace Domain.Entities
                 year = $"2{year}";
                 int age = Convert.ToInt32(year);
                 int ageLimit = DateTime.Now.Year - 18;
-                return age > ageLimit;
+                return age < ageLimit;
             }
 
             return true;

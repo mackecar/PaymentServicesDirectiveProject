@@ -1,18 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Banks\ApplicationServiceInterfaces\Banks.ApplicationServiceInterfaces.csproj" />
     <ProjectReference Include="..\..\Banks\ApplicationServices\Banks.ApplicationServices.csproj" />
-    <ProjectReference Include="..\..\Core\ApplicationService\ApplicationService.csproj" />
     <ProjectReference Include="..\..\Infrastructure\DataAccess\EFDataAccess\Infrastructure.DataAccess.EFDataAccess.csproj" />
+    <ProjectReference Include="..\Domain\Core.Domain.csproj" />
   </ItemGroup>
 
 </Project>

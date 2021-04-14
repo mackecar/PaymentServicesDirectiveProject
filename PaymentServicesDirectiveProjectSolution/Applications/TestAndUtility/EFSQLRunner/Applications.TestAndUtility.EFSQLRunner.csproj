@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Infrastructure\DataAccess\EFDataAccess\Infrastructure.DataAccess.EFDataAccess.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\DataAccess\EFDataAccess\Infrastructure.DataAccess.EFDataAccess.csproj" />
   </ItemGroup>
 
 </Project>
