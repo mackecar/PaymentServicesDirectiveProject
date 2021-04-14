@@ -19,7 +19,10 @@ namespace Domain.ApplicationService
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IBankServiceProvider _bankServiceProvider;
 
-        public UserService(IUserRepository userRepository, IUnitOfWork unitOfWork, IUnitOfWorkFactory unitOfWorkFactory, IBankServiceProvider bankServiceProvider)
+        public UserService(IUserRepository userRepository, 
+            IUnitOfWork unitOfWork, 
+            IUnitOfWorkFactory unitOfWorkFactory, 
+            IBankServiceProvider bankServiceProvider)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
@@ -34,25 +37,26 @@ namespace Domain.ApplicationService
             string bankAccountNumber,
             string bankPinNumber)
         {
-            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork())
+            {
+                bool doesExist = await DoesExist(personalNumber, unitOfWork);
+                if (doesExist) throw new Exception("User already exist!");
 
-            bool doesExist = await DoesExist(personalNumber);
-            if(doesExist)throw new Exception("User already exist!");
+                IBankService bank = _bankServiceProvider.Get(bankName);
+                CheckStatusDto status = await bank.CheckStatusAsync(personalNumber, bankPinNumber);
+                if (!status.Status) throw new Exception(status.Message);
 
-            IBankService bank = _bankServiceProvider.Get(bankName);
-            CheckStatusDto status = await bank.CheckStatusAsync(personalNumber, bankPinNumber);
-            if(!status.Status) throw new Exception(status.Message);
-            
-            User user = new User(firstName,lastName,personalNumber,bankName,bankAccountNumber,bankPinNumber);
-            string userPass = RandomString(6);
-            
-            user.SetUserPass(userPass);
+                User user = new User(firstName, lastName, personalNumber, bankName, bankAccountNumber, bankPinNumber);
+                string userPass = RandomString(6);
 
-            await unitOfWork.UserRepository.InsertAsync(user);
+                user.SetUserPass(userPass);
 
-            await unitOfWork.SaveChangesAsync();
+                await unitOfWork.UserRepository.InsertAsync(user);
 
-            return user.ToUserDto();
+                await unitOfWork.SaveChangesAsync();
+
+                return user.ToUserDto();
+            }
         }
 
         public async Task<UserDto> GetUserByPersonalNumber(string personalNumber)
@@ -64,9 +68,8 @@ namespace Domain.ApplicationService
             return user.ToUserDto();
         }
 
-        private async Task<bool> DoesExist(string personalNumber)
+        private async Task<bool> DoesExist(string personalNumber, IUnitOfWork unitOfWork)
         {
-            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
             User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(personalNumber);
             return user != null;
         }

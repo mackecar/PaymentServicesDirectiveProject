@@ -17,15 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationService", "Core\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Banks", "Banks", "{868C6692-2773-426E-9B87-C2D1D19F0D96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banks.ApplicationServices", "Banks\ApplicationServices\Banks.ApplicationServices.csproj", "{669CE878-F421-4DEF-B646-0A4A97906175}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banks.ApplicationServices", "Banks\ApplicationServices\Banks.ApplicationServices.csproj", "{669CE878-F421-4DEF-B646-0A4A97906175}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banks.ApplicationServiceInterfaces", "Banks\ApplicationServiceInterfaces\Banks.ApplicationServiceInterfaces.csproj", "{95764ABA-FB73-41B9-84EA-3DDA34FF7392}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banks.ApplicationServiceInterfaces", "Banks\ApplicationServiceInterfaces\Banks.ApplicationServiceInterfaces.csproj", "{95764ABA-FB73-41B9-84EA-3DDA34FF7392}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{13E76249-F335-409A-B604-56D2834EA53C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestAndUtility", "TestAndUtility", "{CDB758B2-8D91-493D-B5A0-6C851C4D49C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Applications.TestAndUtility.EFSQLRunner", "Applications\TestAndUtility\EFSQLRunner\EFSQLRunner\Applications.TestAndUtility.EFSQLRunner.csproj", "{CEF7925B-362F-4898-8C46-01BCEAF59162}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Applications.TestAndUtility.EFSQLRunner", "Applications\TestAndUtility\EFSQLRunner\EFSQLRunner\Applications.TestAndUtility.EFSQLRunner.csproj", "{CEF7925B-362F-4898-8C46-01BCEAF59162}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "Applications\WebClient\WebClient.csproj", "{85E641BC-B22E-4EEC-BC42-5224A41255F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{CEF7925B-362F-4898-8C46-01BCEAF59162}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEF7925B-362F-4898-8C46-01BCEAF59162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEF7925B-362F-4898-8C46-01BCEAF59162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85E641BC-B22E-4EEC-BC42-5224A41255F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85E641BC-B22E-4EEC-BC42-5224A41255F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85E641BC-B22E-4EEC-BC42-5224A41255F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85E641BC-B22E-4EEC-BC42-5224A41255F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{95764ABA-FB73-41B9-84EA-3DDA34FF7392} = {868C6692-2773-426E-9B87-C2D1D19F0D96}
 		{CDB758B2-8D91-493D-B5A0-6C851C4D49C3} = {13E76249-F335-409A-B604-56D2834EA53C}
 		{CEF7925B-362F-4898-8C46-01BCEAF59162} = {CDB758B2-8D91-493D-B5A0-6C851C4D49C3}
+		{85E641BC-B22E-4EEC-BC42-5224A41255F6} = {13E76249-F335-409A-B604-56D2834EA53C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6D4794A0-BE3D-409A-AD8F-DDDA4213DC83}

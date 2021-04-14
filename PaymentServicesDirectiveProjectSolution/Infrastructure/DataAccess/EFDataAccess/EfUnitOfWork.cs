@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Domain.Repositories;
+using Infrastructure.DataAccess.EFDataAccess.Repositories;
 
 namespace Infrastructure.DataAccess.EFDataAccess
 {
@@ -11,7 +12,7 @@ namespace Infrastructure.DataAccess.EFDataAccess
         public EfUnitOfWork()
         {
             Context = new PSDDbContext();
-            //UserRepository = new 
+            UserRepository = new EFUserRepository(Context);
         }
 
         public async Task SaveChangesAsync()
