@@ -1,0 +1,17 @@
+version: '2.4'
+
+services:
+    web_client:
+        build:
+            context: ./
+            dockerfile: ./HaloOglasi.PushNotificationAgent/Dockerfile
+        container_name: psd_web_client
+        hostname: psd_web_client
+        ports:
+            - "5005:80"
+        networks:
+            - psdnet
+  
+
+networks:
+    psdnet:
