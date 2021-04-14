@@ -15,7 +15,7 @@ namespace Banks.ApplicationServices
             {
                 return new CheckStatusDto()
                 {
-                    Message = "Korisnik ne postoji!",
+                    Message = "Korisnik ne postoji u banci Dummy!",
                     Status = false
                 };
             }
@@ -32,7 +32,7 @@ namespace Banks.ApplicationServices
             return new CheckStatusDto()
             {
                 Status = false,
-                Message = "Korisnik ne postoji!"
+                Message = "Korisnik ne postoji u banci Dummy!",
             };
         }
 
@@ -42,7 +42,7 @@ namespace Banks.ApplicationServices
             {
                 return new DepositDto()
                 {
-                    Message = "Korisnik ne postoji!",
+                    Message = "Korisnik ne postoji u banci Dummy!",
                     Status = false
                 };
             }
@@ -59,7 +59,7 @@ namespace Banks.ApplicationServices
 
             return new DepositDto()
             {
-                Message = "Korisnik ne postoji!",
+                Message = "Korisnik ne postoji u banci Dummy!",
                 Status = false
             };
         }
@@ -70,7 +70,7 @@ namespace Banks.ApplicationServices
             {
                 return new WithdrawDto()
                 {
-                    Message = "Korisnik ne postoji!",
+                    Message = "Korisnik ne postoji u banci Dummy!",
                     Status = false
                 };
             }
@@ -87,7 +87,7 @@ namespace Banks.ApplicationServices
 
             return new WithdrawDto()
             {
-                Message = "Korisnik ne postoji!",
+                Message = "Korisnik ne postoji u banci Dummy!",
                 Status = false
             };
         }

@@ -15,6 +15,8 @@ using Domain.ApplicationService;
 using Domain.Repositories;
 using Infrastructure.DataAccess.EFDataAccess;
 using Infrastructure.DataAccess.EFDataAccess.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using WebClient.Filters;
 using WebClient.Helpers;
 
 namespace WebClient
@@ -53,7 +55,13 @@ namespace WebClient
                 return bsp;
             });
             services.AddScoped<UserService>();
+            services.AddTransient<CustomExceptionFilterAttribute>();
             services.AddControllersWithViews();
+
+            services.AddMvc((MvcOptions options) =>
+            {
+                options.Filters.Add(typeof(CustomExceptionFilterAttribute));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
