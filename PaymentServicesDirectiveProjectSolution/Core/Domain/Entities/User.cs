@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.Domain.Exceptions;
 
 namespace Domain.Entities
@@ -15,6 +16,8 @@ namespace Domain.Entities
         public string UserPass { get; private set; }
         public DateTime CreationDate { get; private set; }
         public decimal Amount { get; private set; } 
+
+        public List<Transaction> Transactions { get; set; }
 
         public User() { }
 

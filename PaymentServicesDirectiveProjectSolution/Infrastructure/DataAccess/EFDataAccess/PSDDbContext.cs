@@ -10,6 +10,7 @@ namespace Infrastructure.DataAccess.EFDataAccess
     public class PSDDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         public PSDDbContext() : base(EfConnectionSettings.DbContextOptions)
         {
@@ -18,6 +19,7 @@ namespace Infrastructure.DataAccess.EFDataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new TransactionConfiguration());
         }
     }
 }

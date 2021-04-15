@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Core.Domain.Repositories;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infrastructure.DataAccess.EFDataAccess.Repositories
+{
+    public class EFTransactionRepository : EfRepository<Transaction>, ITransactionRepository
+    {
+        public EFTransactionRepository(PSDDbContext context) : base(context)
+        {
+        }
+
+        public async Task InsertAsync(Transaction transaction)
+        {
+            await DbSet.AddAsync(transaction);
+        }
+
+        public async Task<List<Transaction>> GetUsersTransactions(int userId)
+        {
+            return await DbSet.Where(t => t.UserId == userId).ToListAsync();
+        }
+    }
+}

@@ -4,14 +4,16 @@ using Infrastructure.DataAccess.EFDataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.DataAccess.EFDataAccess.Migrations
 {
     [DbContext(typeof(PSDDbContext))]
-    partial class PSDDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210415114017_Trnsctin")]
+    partial class Trnsctin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
