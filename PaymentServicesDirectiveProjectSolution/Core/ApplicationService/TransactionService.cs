@@ -55,6 +55,33 @@ namespace Core.ApplicationService
             return transaction.ToTransactionDto();
         }
 
+        public async Task<TransactionDto> CreateBankWithdrawTransaction(string userPersonalNumber, string userPass, decimal amount)
+        {
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+            User user = await GetUserAsync(userPersonalNumber, unitOfWork);
+            if (user.UserPass != userPass) throw new TransactionServiceException("Korisnik nije autorizovan!");
+
+            IBankService bank = _bankServiceProvider.Get(user.BankName);
+            await bank.WithdrawAsync(userPersonalNumber, user.BankPinNumber, amount);
+
+            Transaction transaction = new Transaction(TransactionType.BankWithdraw, user.Id, null, null, amount, 0);
+            user.Withdraw(transaction.Amount);
+
+            try
+            {
+                await unitOfWork.TransactionRepository.Insert(transaction);
+                await unitOfWork.UserRepository.Update(user);
+            }
+            catch (Exception ex)
+            {
+                throw new TransactionException($"Transver novca na racun u banci nije moguc! {ex.Message}");
+            }
+
+            await unitOfWork.SaveChangesAsync();
+
+            return transaction.ToTransactionDto();
+        }
+
         private async Task<User> GetUserAsync(string userPersonalNumber, IUnitOfWork unitOfWork)
         {
             User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(userPersonalNumber);

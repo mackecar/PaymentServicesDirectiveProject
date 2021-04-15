@@ -32,6 +32,20 @@ namespace Applications.WebClient.Controllers
         }
 
 
+        public IActionResult CreateBankWithdrawTransaction()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBankWithdrawTransaction(CreateTransactionVM model)
+        {
+            await _transactionService.CreateBankWithdrawTransaction(model.PersonalNumber, model.UserPass, model.Amount);
+
+            return RedirectToAction("TransactionConfirmation", new { message = "Transacija je uspesno izvrsena!" });
+        }
+
+
         public IActionResult TransactionConfirmation(string message)
         {
             ViewBag.Message = message;
