@@ -26,6 +26,15 @@ namespace Infrastructure.DataAccess.EFDataAccess.Repositories
             return await DbSet.FirstOrDefaultAsync(u => u.PersonalNumber == personalNumber);
         }
 
-        
+        public async Task Insert(User user)
+        {
+            await DbSet.AddAsync(user);
+        }
+
+        public async Task<bool> Delete(User user)
+        {
+            DbSet.Remove(user);
+            return await Task.FromResult(true);
+        }
     }
 }

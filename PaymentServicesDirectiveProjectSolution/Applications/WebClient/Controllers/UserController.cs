@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain.ApplicationService;
+using Core.ApplicationService;
 using Domain.DTOs;
 using WebClient.Models.ViewModels;
 

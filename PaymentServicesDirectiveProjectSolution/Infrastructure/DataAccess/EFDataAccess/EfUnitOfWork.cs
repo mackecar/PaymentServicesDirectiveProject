@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Core.Domain.Repositories;
 using Domain.Repositories;
 using Infrastructure.DataAccess.EFDataAccess.Repositories;
 
@@ -7,12 +8,14 @@ namespace Infrastructure.DataAccess.EFDataAccess
     public class EfUnitOfWork : IUnitOfWork
     {
         public IUserRepository UserRepository { get; }
+        public ITransactionRepository TransactionRepository { get; }
         private PSDDbContext Context;
 
         public EfUnitOfWork()
         {
             Context = new PSDDbContext();
             UserRepository = new EFUserRepository(Context);
+            TransactionRepository = new EFTransactionRepository(Context);
         }
 
         public async Task SaveChangesAsync()

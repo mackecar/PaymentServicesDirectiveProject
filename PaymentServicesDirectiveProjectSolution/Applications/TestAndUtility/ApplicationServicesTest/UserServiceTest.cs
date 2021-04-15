@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using ApplicationService;
 using Banks.ApplicationServiceInterfaces;
 using Banks.ApplicationServices;
+using Core.ApplicationService;
 using Core.ApplicationService.Exceptions;
 using Core.Domain.Exceptions;
-using Domain.ApplicationService;
 using Domain.DTOs;
 using Domain.Repositories;
 using Infrastructure.DataAccess.EFDataAccess;
@@ -21,8 +21,6 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
     {
         private PSDDbContext _context;
         private UserService _userService;
-        private IUserRepository _userRepository;
-        private IUnitOfWork _unitOfWork;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IBankServiceProvider _bankServiceProvider;
 
@@ -32,11 +30,9 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
             DbContextFactory dbContextFactory = new DbContextFactory();
             _context = dbContextFactory.CreateDbContext(new string[] { });
             _unitOfWorkFactory = new EfUnitOfWorkFactory();
-            _unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
-            _userRepository = new EFUserRepository(_context);
             _bankServiceProvider = new BankServiceProvider();
             _bankServiceProvider.Add("dummy", new DummyBankService());
-            _userService = new UserService(_userRepository,_unitOfWork,_unitOfWorkFactory, _bankServiceProvider);
+            _userService = new UserService(_unitOfWorkFactory, _bankServiceProvider);
 
         }
 
@@ -44,7 +40,7 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
         public async Task Cleanup()
         {
             await _context.DisposeAsync();
-            _unitOfWork = null;
+            _unitOfWorkFactory = null;
         }
 
         [TestMethod]

@@ -1,32 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ApplicationService.Extensions;
 using Banks.ApplicationServiceInterfaces;
 using Banks.ApplicationServiceInterfaces.DTOs;
-using Core.ApplicationService.Exceptions;
 using Domain.DTOs;
 using Domain.Entities;
 using Domain.Repositories;
 
-namespace Domain.ApplicationService
+namespace Core.ApplicationService
 {
     public class UserService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IBankServiceProvider _bankServiceProvider;
 
-        public UserService(IUserRepository userRepository, 
-            IUnitOfWork unitOfWork, 
+        public UserService(
             IUnitOfWorkFactory unitOfWorkFactory, 
             IBankServiceProvider bankServiceProvider)
         {
-            _userRepository = userRepository;
-            _unitOfWork = unitOfWork;
             _unitOfWorkFactory = unitOfWorkFactory;
             _bankServiceProvider = bankServiceProvider;
         }
@@ -52,7 +44,7 @@ namespace Domain.ApplicationService
 
             user.SetUserPass(userPass);
 
-            await unitOfWork.UserRepository.InsertAsync(user);
+            await unitOfWork.UserRepository.Insert(user);
 
             await unitOfWork.SaveChangesAsync();
 

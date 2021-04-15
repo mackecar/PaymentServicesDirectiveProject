@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using ApplicationService;
 using Banks.ApplicationServiceInterfaces;
 using Banks.ApplicationServices;
-using Domain.ApplicationService;
+using Core.ApplicationService;
 using Domain.Repositories;
 using Infrastructure.DataAccess.EFDataAccess;
 using Infrastructure.DataAccess.EFDataAccess.Repositories;

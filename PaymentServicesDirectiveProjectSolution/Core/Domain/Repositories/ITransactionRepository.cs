@@ -6,9 +6,8 @@ using Domain.Entities;
 
 namespace Core.Domain.Repositories
 {
-    public interface ITransactionRepository
+    public interface ITransactionRepository : IRepository<Transaction>
     {
-        Task InsertAsync(Transaction transaction);
         Task<List<Transaction>> GetUsersTransactions(int userId);
     }
 }

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Domain.Repositories;
 using Domain.Entities;
 
 namespace Domain.Repositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IRepository<User>
     {
-        Task InsertAsync(User user);
         Task<User> GetUserByPersonalNumberAsync(string personalNumber);
     }
 }
