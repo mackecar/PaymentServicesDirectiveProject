@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Domain.Exceptions;
 
 namespace Domain.Entities
 {
@@ -36,40 +37,40 @@ namespace Domain.Entities
 
         private void SetFirstName(string firstName)
         {
-            if(string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(firstName,"First name is empty!");
+            if(string.IsNullOrWhiteSpace(firstName)) throw new UserException("Ime mora biti popunjeno!");
             FirstName = firstName;
         }
 
         private void SetLastName(string lastName)
         {
-            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(lastName, "Last name is empty!");
+            if (string.IsNullOrWhiteSpace(lastName)) throw new UserException( "Prezime mora biti popunjeno!");
             LastName = lastName;
         }
 
         private void SetPersonalNumber(string personalNumber)
         {
-            if (string.IsNullOrWhiteSpace(personalNumber)) throw new ArgumentNullException(personalNumber, "Personal number is empty!");
-            if(personalNumber.Length != 13) throw new ArgumentException("Personal number must be string of 13 character length!", personalNumber);
-            if(!IsPersonAdult(personalNumber)) throw new ArgumentException("Person is not Adult!",personalNumber);
+            if (string.IsNullOrWhiteSpace(personalNumber)) throw new ArgumentNullException(personalNumber, "JMBG mora biti popunjeno!");
+            if(personalNumber.Length != 13) throw new UserException("JMBG mora da ima 13 cifara!");
+            if(!IsPersonAdult(personalNumber)) throw new UserException("Korisnik nije punoletan!");
             PersonalNumber = personalNumber;
         }
 
         private void SetBankName(string bankName)
         {
-            if (string.IsNullOrWhiteSpace(bankName)) throw new ArgumentNullException(bankName, "Bank name is empty!");
+            if (string.IsNullOrWhiteSpace(bankName)) throw new UserException( "Ime banke mora biti popunjeno!");
             BankName = bankName;
         }
 
         private void SetBankAccountNumber(string bankAccountNumber)
         {
-            if (string.IsNullOrWhiteSpace(bankAccountNumber)) throw new ArgumentNullException(bankAccountNumber, "Bank account number is empty!");
+            if (string.IsNullOrWhiteSpace(bankAccountNumber)) throw new UserException( "Broj bankovnog racuna mora biti popunjeno!");
             BankAccountNumber = bankAccountNumber;
         }
 
         private void SetBankPinNumber(string bankPinNumber)
         {
-            if (string.IsNullOrWhiteSpace(bankPinNumber)) throw new ArgumentNullException(bankPinNumber, "Bank pin number is empty!");
-            if(bankPinNumber.Length != 4)throw new ArgumentException("Bank pin number must be 4 character length!", bankPinNumber);
+            if (string.IsNullOrWhiteSpace(bankPinNumber)) throw new UserException( "PIN mora biti popunjen!");
+            if(bankPinNumber.Length != 4)throw new UserException("PIN mora da ima 4 cifre!");
             BankPinNumber = bankPinNumber;
         }
 

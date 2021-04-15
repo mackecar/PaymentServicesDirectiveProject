@@ -20,19 +20,10 @@ namespace Banks.ApplicationServices
                 };
             }
 
-            if (personalNumber == "0312984710064")
-            {
-                return new CheckStatusDto()
-                {
-                    Message = "Ok",
-                    Status = true
-                };
-            }
-
             return new CheckStatusDto()
             {
-                Status = false,
-                Message = "Korisnik ne postoji u banci Dummy!",
+                Message = "Ok",
+                Status = true
             };
         }
 
@@ -47,20 +38,11 @@ namespace Banks.ApplicationServices
                 };
             }
 
-            if (personalNumber == "0312984710064")
-            {
-                return new DepositDto()
-                {
-                    Message = "Ok",
-                    Status = true,
-                    Amount = amount
-                };
-            }
-
             return new DepositDto()
             {
-                Message = "Korisnik ne postoji u banci Dummy!",
-                Status = false
+                Message = "Ok",
+                Status = true,
+                Amount = amount
             };
         }
 
@@ -75,20 +57,11 @@ namespace Banks.ApplicationServices
                 };
             }
 
-            if (personalNumber == "0312984710064")
-            {
-                return new WithdrawDto()
-                {
-                    Message = "Ok",
-                    Status = true,
-                    Amount = amount
-                };
-            }
-
             return new WithdrawDto()
             {
-                Message = "Korisnik ne postoji u banci Dummy!",
-                Status = false
+                Message = "Ok",
+                Status = true,
+                Amount = amount
             };
         }
     }

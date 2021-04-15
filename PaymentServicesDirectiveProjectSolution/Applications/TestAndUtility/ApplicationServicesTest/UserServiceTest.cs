@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using ApplicationService;
 using Banks.ApplicationServiceInterfaces;
 using Banks.ApplicationServices;
+using Core.ApplicationService.Exceptions;
+using Core.Domain.Exceptions;
 using Domain.ApplicationService;
 using Domain.DTOs;
 using Domain.Repositories;
@@ -50,10 +52,43 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
         {
             try
             {
-                UserDto user = await _userService.CreateUser("Dragan", "Macura", "0312984710064", "dummy", "160-9999-00",
-                        "1234");
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710064", "dummy", "160-9999-00", "1234");
 
                 Assert.AreNotEqual(null, user, "User must not be null");
+                Assert.AreEqual("Test", user.FirstName, "Ime mora da bude 'Test'");
+                Assert.AreEqual("Test", user.LastName, "Prezime mora da bude 'Test'");
+                Assert.AreEqual("0312985710064", user.PersonalNumber, "JMBG mora da bude '0312985710064'");
+                Assert.AreEqual("dummy", user.BankName, "Ime banke mora da bude 'dummy'");
+                Assert.AreEqual("160-9999-00", user.BankAccountNumber, "Broj bankovnog racuna mora da bude '160-9999-00'");
+                Assert.AreEqual("1234", user.BankPinNumber, "PIN mora da bude '1234'");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected error: " + ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task TestCreateExistedUser()
+        {
+            try
+            {
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710064", "dummy", "160-9999-00", "1234");
+
+                Assert.AreEqual(user, user, "Korisnik postoji!");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected error: " + ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task TestCreateNotAdultUser()
+        {
+            try
+            {
+                await Assert.ThrowsExceptionAsync<UserException>(async () => await _userService.CreateUser("Test", "Test", "0312020710064", "dummy", "160-9999-00", "1234"),"Korisnik nije punoletan!");
             }
             catch (Exception ex)
             {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ApplicationService.Extensions;
 using Banks.ApplicationServiceInterfaces;
 using Banks.ApplicationServiceInterfaces.DTOs;
+using Core.ApplicationService.Exceptions;
 using Domain.DTOs;
 using Domain.Entities;
 using Domain.Repositories;
