@@ -12,6 +12,7 @@ using ApplicationService;
 using Banks.ApplicationServiceInterfaces;
 using Banks.ApplicationServices;
 using Core.ApplicationService;
+using Core.Domain.Repositories;
 using Domain.Repositories;
 using Infrastructure.DataAccess.EFDataAccess;
 using Infrastructure.DataAccess.EFDataAccess.Repositories;
@@ -48,6 +49,7 @@ namespace WebClient
             services.AddTransient<IUnitOfWork, EfUnitOfWork>();
             services.AddTransient<IUnitOfWorkFactory, EfUnitOfWorkFactory>();
             services.AddScoped<IUserRepository, EFUserRepository>();
+            services.AddScoped<ITransactionRepository, EFTransactionRepository>();
             services.AddScoped<IBankServiceProvider, BankServiceProvider>(sp =>
             {
                 var bsp = new BankServiceProvider();
@@ -55,6 +57,7 @@ namespace WebClient
                 return bsp;
             });
             services.AddScoped<UserService>();
+            services.AddScoped<TransactionService>();
             services.AddTransient<CustomExceptionFilterAttribute>();
             services.AddControllersWithViews();
 

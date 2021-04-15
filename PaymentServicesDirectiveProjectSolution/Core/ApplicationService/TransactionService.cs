@@ -50,6 +50,8 @@ namespace Core.ApplicationService
                 throw new TransactionException($"Transver novca sa bankovnog racuna na nalog nije moguce! {ex.Message}");
             }
 
+            await unitOfWork.SaveChangesAsync();
+
             return transaction.ToTransactionDto();
         }
 
