@@ -2,6 +2,7 @@
 using Core.Domain.Repositories;
 using Domain.Repositories;
 using Infrastructure.DataAccess.EFDataAccess.Repositories;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.DataAccess.EFDataAccess
 {
@@ -10,12 +11,28 @@ namespace Infrastructure.DataAccess.EFDataAccess
         public IUserRepository UserRepository { get; }
         public ITransactionRepository TransactionRepository { get; }
         private PSDDbContext Context;
+        private IDbContextTransaction Transaction;
 
         public EfUnitOfWork()
         {
             Context = new PSDDbContext();
             UserRepository = new EFUserRepository(Context);
             TransactionRepository = new EFTransactionRepository(Context);
+        }
+
+        public async Task BeginTransactionAsync()
+        {
+            Transaction = await Context.Database.BeginTransactionAsync();
+        }
+
+        public Task CommitTransactionAsync()
+        {
+            return Transaction.CommitAsync();
+        }
+
+        public Task RollbackTransactionAsync()
+        {
+            return Transaction.RollbackAsync();
         }
 
         public async Task SaveChangesAsync()
@@ -31,8 +48,8 @@ namespace Infrastructure.DataAccess.EFDataAccess
             {
                 if (disposing)
                 {
+                    Transaction?.Dispose();
                     Context.Dispose();
-                    Context = null;
                 }
                 disposedValue = true;
             }
