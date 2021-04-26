@@ -76,5 +76,23 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
                 Assert.Fail("Unexpected error: " + ex.Message);
             }
         }
+
+        [TestMethod]
+        public async Task TestCreateUserToUserTransaction()
+        {
+            try
+            {
+                TransactionDto transaction = await _transactionService.CreateUserToUserTransaction("0312984710064", "2O1A8V", 999, "0312984710066");
+
+                Assert.AreNotEqual(null, transaction, "Transaction must not be null");
+                Assert.AreEqual(999, transaction.Amount, "Iznos mora biti 999!");
+                Assert.AreEqual(TransactionType.PayOut, transaction.TransactionType, "Tip mora biti PayOut!");
+            }
+            catch (Exception ex)
+            {
+
+                Assert.Fail("Unexpected error: " + ex.Message);
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace Infrastructure.DataAccess.EFDataAccess.Repositories
 
         public async Task<User> GetUserByPersonalNumberAsync(string personalNumber)
         {
-            return await DbSet.FirstOrDefaultAsync(u => u.PersonalNumber == personalNumber);
+            return await DbSet.Include(u=>u.Transactions).FirstOrDefaultAsync(u => u.PersonalNumber == personalNumber);
         }
 
         public async Task Insert(User user)

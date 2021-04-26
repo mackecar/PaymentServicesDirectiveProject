@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -89,6 +90,9 @@ namespace Core.ApplicationService
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
 
             User sourceUser = await GetUserAndValidateAsync(userPersonalNumber, userPass, unitOfWork);
+
+            if(sourceUser.Amount < amount) throw new TransactionServiceException("Korisnik nema dovoljno sredstava!");
+
             User destinationUser = await GetUserAndValidateAsync(destinationUserPersonalNumber, unitOfWork);
 
             decimal fee = FeeCalculator(sourceUser, amount);
@@ -103,7 +107,7 @@ namespace Core.ApplicationService
                 await unitOfWork.TransactionRepository.Insert(payOutTransaction);
                 await unitOfWork.UserRepository.Update(sourceUser);
 
-                Transaction payInTransaction = new Transaction(TransactionType.PayIn, destinationUser.Id, sourceUser.Id, destinationUser.Id, amount, fee);
+                Transaction payInTransaction = new Transaction(TransactionType.PayIn, destinationUser.Id, sourceUser.Id, destinationUser.Id, amount, 0);
                 destinationUser.Deposit(amount);
 
                 await unitOfWork.TransactionRepository.Insert(payInTransaction);
@@ -125,9 +129,13 @@ namespace Core.ApplicationService
 
         private decimal FeeCalculator(User user, decimal amount)
         {
-            if ((user.CreationDate - DateTime.Now).Days > 7)
+            if ((DateTime.Now - user.CreationDate).Days > 7)
             {
-                //todo: napraviti proveru za prvu transakciju u mesecu
+                if (user.Transactions.Count(t => t.TransactionDate.Month == DateTime.Now.Month) == 0)
+                {
+                    return 0;
+                }
+                
                 if (amount <= 10000)
                 {
                     return 100;
