@@ -51,11 +51,12 @@ namespace Core.ApplicationService
             return user.ToUserDto();
         }
 
-        public async Task<UserDto> GetUserByPersonalNumber(string personalNumber)
+        public async Task<UserDto> GetUserByPersonalNumber(string personalNumber,string userPass)
         {
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
             User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(personalNumber);
-            if(user == null) throw new NullReferenceException("User does not exist!");
+            if(user == null) throw new NullReferenceException("Korisnik ne postoji!");
+            if(user.UserPass != userPass) throw new NullReferenceException("Korisnik nije autorizovan!");
 
             return user.ToUserDto();
         }

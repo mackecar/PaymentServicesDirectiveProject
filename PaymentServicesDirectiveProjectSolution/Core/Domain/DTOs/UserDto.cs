@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Core.Domain.DTOs;
 using Domain.Entities;
 
 namespace Domain.DTOs
@@ -17,6 +19,7 @@ namespace Domain.DTOs
         public string UserPass { get;  set; }
         public DateTime CreationDate { get;  set; }
         public decimal Amount { get;  set; }
+        public List<TransactionDto> Transactions { get; set; }
 
         public UserDto() { }
 
@@ -32,6 +35,7 @@ namespace Domain.DTOs
             UserPass = user.UserPass;
             CreationDate = user.CreationDate;
             Amount = user.Amount;
+            Transactions = user.Transactions?.Select(t => new TransactionDto(t)).ToList();
         }
     }
 }

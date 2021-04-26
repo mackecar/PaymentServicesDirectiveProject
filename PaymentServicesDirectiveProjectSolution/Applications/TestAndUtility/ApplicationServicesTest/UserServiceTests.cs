@@ -91,5 +91,21 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
                 Assert.Fail("Unexpected error: " + ex.Message);
             }
         }
+
+        [TestMethod]
+        public async Task TestGetUserDetails()
+        {
+            try
+            {
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710067", "dummy", "160-9999-00", "1234");
+                UserDto userDetails = await _userService.GetUserByPersonalNumber("0312985710067",user.UserPass);
+
+                Assert.AreNotEqual(null, user, "User must not be null");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected error: " + ex.Message);
+            }
+        }
     }
 }

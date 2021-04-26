@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
+using Applications.WebClient.Models.ViewModels.TransactionVMS;
 using Domain.DTOs;
 
-namespace WebClient.Models.ViewModels
+namespace Applications.WebClient.Models.ViewModels.UserVMS
 {
     public class UserVM
     {
@@ -38,6 +38,8 @@ namespace WebClient.Models.ViewModels
         [Display(Name = "Iznos")]
         public decimal Amount { get; set; }
 
+        public List<TransactionVM> Transactions { get; set; }
+
         public UserVM() { }
 
         public UserVM(UserDto user)
@@ -52,6 +54,7 @@ namespace WebClient.Models.ViewModels
             UserPass = user.UserPass;
             CreationDate = user.CreationDate;
             Amount = user.Amount;
+            Transactions = user.Transactions?.Select(t => new TransactionVM(t)).ToList();
         }
     }
 

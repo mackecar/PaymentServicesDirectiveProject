@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Applications.WebClient.Models.ViewModels;
+using Applications.WebClient.Models.ViewModels.TransactionVMS;
 using Core.ApplicationService;
 using Core.Domain.DTOs;
 

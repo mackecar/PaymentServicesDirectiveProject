@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Applications.WebClient.Models.ViewModels.UserVMS;
 using Core.ApplicationService;
 using Domain.DTOs;
-using WebClient.Models.ViewModels;
 
 namespace WebClient.Controllers
 {
@@ -41,6 +41,20 @@ namespace WebClient.Controllers
         {
             ViewBag.UserPass = userPass;
             return View();
+        }
+
+        public IActionResult GetUserDetails()
+        {
+            UserDetailsVM model = new UserDetailsVM();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserDetails(UserDetailsVM model)
+        {
+            UserDto user = await _userService.GetUserByPersonalNumber(model.PersonalNumber,model.UserPass);
+            model.User = user.ToUserVm();
+            return View(model);
         }
     }
 }
