@@ -82,11 +82,12 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
         {
             try
             {
-                TransactionDto transaction = await _transactionService.CreateUserToUserTransaction("0312984710064", "2O1A8V", 999, "0312984710066");
+                TransactionDto transaction = await _transactionService.CreateUserToUserTransaction("0312984710064", "123456", 999, "0312984710066");
 
                 Assert.AreNotEqual(null, transaction, "Transaction must not be null");
                 Assert.AreEqual(999, transaction.Amount, "Iznos mora biti 999!");
                 Assert.AreEqual(TransactionType.PayOut, transaction.TransactionType, "Tip mora biti PayOut!");
+                Assert.AreEqual(100, transaction.Fee, "Provizija mora biti 0!");
             }
             catch (Exception ex)
             {

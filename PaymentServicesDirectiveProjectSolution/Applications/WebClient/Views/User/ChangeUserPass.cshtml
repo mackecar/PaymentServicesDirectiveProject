@@ -1,0 +1,33 @@
+﻿@model Applications.WebClient.Models.ViewModels.UserVMS.ChangeUserPassVM
+
+@{
+    ViewData["Title"] = "Promena lozinke";
+}
+
+@ViewData["Title"]
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ChangeUserPass">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PersonalNumber" class="control-label"></label>
+                <input asp-for="PersonalNumber" class="form-control" />
+                <span asp-validation-for="PersonalNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OldUserPass" class="control-label"></label>
+                <input asp-for="OldUserPass" class="form-control" />
+                <span asp-validation-for="OldUserPass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewUserPass" class="control-label"></label>
+                <input asp-for="NewUserPass" class="form-control" />
+                <span asp-validation-for="NewUserPass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Promeni" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+

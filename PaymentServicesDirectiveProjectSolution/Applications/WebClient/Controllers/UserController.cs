@@ -56,5 +56,24 @@ namespace WebClient.Controllers
             model.User = user.ToUserVm();
             return View(model);
         }
+
+        public IActionResult ChangeUserPass()
+        {
+            return View(new ChangeUserPassVM());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeUserPass(ChangeUserPassVM model)
+        {
+            UserDto user = await _userService.ChangeUserPass(model.PersonalNumber, model.OldUserPass, model.NewUserPass);
+
+            return RedirectToAction("ChangeUserPassSuccess", new {message = $"Uspesno ste promenili korisnicku lozinku! {user.PersonalNumber}"});
+        }
+
+        public IActionResult ChangeUserPassSuccess(string message)
+        {
+            ViewBag.Message = message;
+            return View();
+        }
     }
 }

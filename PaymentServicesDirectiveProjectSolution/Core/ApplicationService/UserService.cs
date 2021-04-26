@@ -58,6 +58,23 @@ namespace Core.ApplicationService
             if(user == null) throw new NullReferenceException("Korisnik ne postoji!");
             if(user.UserPass != userPass) throw new NullReferenceException("Korisnik nije autorizovan!");
 
+
+            return user.ToUserDto();
+        }
+
+        public async Task<UserDto> ChangeUserPass(string personalNumber, string oldUserPass, string newUserPass)
+        {
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+            User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(personalNumber);
+            if (user == null) throw new NullReferenceException("Korisnik ne postoji!");
+            if (user.UserPass != oldUserPass) throw new NullReferenceException("Korisnik nije autorizovan!");
+
+            user.SetUserPass(newUserPass);
+
+            await unitOfWork.UserRepository.Update(user);
+
+            await unitOfWork.SaveChangesAsync();
+
             return user.ToUserDto();
         }
 

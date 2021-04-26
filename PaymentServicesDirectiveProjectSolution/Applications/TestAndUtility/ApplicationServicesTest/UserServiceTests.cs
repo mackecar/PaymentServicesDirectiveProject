@@ -107,5 +107,22 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
                 Assert.Fail("Unexpected error: " + ex.Message);
             }
         }
+
+        [TestMethod]
+        public async Task TestChangeUserPass()
+        {
+            try
+            {
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710068", "dummy", "160-9999-00", "1234");
+                UserDto userDetails = await _userService.ChangeUserPass(user.PersonalNumber, user.UserPass,"654321");
+
+                Assert.AreNotEqual(null, user, "User must not be null");
+                Assert.AreEqual("654321", userDetails.UserPass, "Ime mora da bude '654321'");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected error: " + ex.Message);
+            }
+        }
     }
 }
