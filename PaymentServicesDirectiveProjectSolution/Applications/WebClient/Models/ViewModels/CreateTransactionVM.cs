@@ -11,6 +11,9 @@ namespace Applications.WebClient.Models.ViewModels
         [Display(Name = "JMBG")]
         public string PersonalNumber { get; set; }
 
+        [Display(Name = "JMBG korisnika")]
+        public string DestinationPersonalNumber { get; set; }
+
         [Display(Name = "Lozinka")]
         public string UserPass { get; set; }
 

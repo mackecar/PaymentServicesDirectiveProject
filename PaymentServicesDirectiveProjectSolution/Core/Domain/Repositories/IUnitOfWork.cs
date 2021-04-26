@@ -11,5 +11,9 @@ namespace Domain.Repositories
         IUserRepository UserRepository { get; }
         ITransactionRepository TransactionRepository { get; }
         Task SaveChangesAsync();
+
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
     }
 }

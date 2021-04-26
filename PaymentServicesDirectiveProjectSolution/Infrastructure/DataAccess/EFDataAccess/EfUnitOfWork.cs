@@ -10,34 +10,35 @@ namespace Infrastructure.DataAccess.EFDataAccess
     {
         public IUserRepository UserRepository { get; }
         public ITransactionRepository TransactionRepository { get; }
-        private PSDDbContext Context;
-        private IDbContextTransaction Transaction;
+
+        private readonly PSDDbContext _context;
+        private IDbContextTransaction _dbContextTransaction;
 
         public EfUnitOfWork()
         {
-            Context = new PSDDbContext();
-            UserRepository = new EFUserRepository(Context);
-            TransactionRepository = new EFTransactionRepository(Context);
+            _context = new PSDDbContext();
+            UserRepository = new EFUserRepository(_context);
+            TransactionRepository = new EFTransactionRepository(_context);
         }
 
         public async Task BeginTransactionAsync()
         {
-            Transaction = await Context.Database.BeginTransactionAsync();
+            _dbContextTransaction = await _context.Database.BeginTransactionAsync();
         }
 
         public Task CommitTransactionAsync()
         {
-            return Transaction.CommitAsync();
+            return _dbContextTransaction.CommitAsync();
         }
 
         public Task RollbackTransactionAsync()
         {
-            return Transaction.RollbackAsync();
+            return _dbContextTransaction.RollbackAsync();
         }
 
         public async Task SaveChangesAsync()
         {
-            await Context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         private bool disposedValue = false; // To detect redundant calls
@@ -48,8 +49,8 @@ namespace Infrastructure.DataAccess.EFDataAccess
             {
                 if (disposing)
                 {
-                    Transaction?.Dispose();
-                    Context.Dispose();
+                    TransactionRepository?.Dispose();
+                    _context.Dispose();
                 }
                 disposedValue = true;
             }

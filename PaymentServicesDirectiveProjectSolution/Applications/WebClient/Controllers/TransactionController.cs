@@ -45,6 +45,19 @@ namespace Applications.WebClient.Controllers
             return RedirectToAction("TransactionConfirmation", new { message = "Transacija je uspesno izvrsena!" });
         }
 
+        public IActionResult CreateUserTransaction()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUserTransaction(CreateTransactionVM model)
+        {
+            await _transactionService.CreateUserToUserTransaction(model.PersonalNumber, model.UserPass, model.Amount,model.DestinationPersonalNumber);
+
+            return RedirectToAction("TransactionConfirmation", new { message = "Transacija je uspesno izvrsena!" });
+        }
+
 
         public IActionResult TransactionConfirmation(string message)
         {

@@ -1,5 +1,6 @@
 ﻿using Domain.Repositories;
 using Infrastructure.DataAccess.EFDataAccess;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ApplicationService
 {
