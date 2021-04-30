@@ -35,6 +35,7 @@ namespace Core.ApplicationService
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
 
             User user = await GetUserAndValidateAsync(userPersonalNumber, userPass,unitOfWork);
+            if(user.IsBlocked)throw new TransactionServiceException("CreateBankDepositTransaction - akcija nije moguca! Korisnik je blokiran!");
 
             IBankService bank = _bankServiceProvider.Get(user.BankName);
             await bank.DepositAsync(userPersonalNumber, user.BankPinNumber, amount);
@@ -90,10 +91,12 @@ namespace Core.ApplicationService
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
 
             User sourceUser = await GetUserAndValidateAsync(userPersonalNumber, userPass, unitOfWork);
+            if (sourceUser.IsBlocked) throw new TransactionServiceException("CreateUserToUserTransaction - akcija nije moguca! Korisnik je blokiran!");
 
-            if(sourceUser.Amount < amount) throw new TransactionServiceException("CreateBankWithdrawTransaction - Korisnik nema dovoljno sredstava!");
+            if (sourceUser.Amount < amount) throw new TransactionServiceException("CreateBankWithdrawTransaction - Korisnik nema dovoljno sredstava!");
 
             User destinationUser = await GetUserAndValidateAsync(destinationUserPersonalNumber, unitOfWork);
+            if (destinationUser.IsBlocked) throw new TransactionServiceException("CreateUserToUserTransaction - akcija nije moguca! Korisnik je blokiran!");
 
             decimal fee = FeeCalculator(sourceUser, amount);
 

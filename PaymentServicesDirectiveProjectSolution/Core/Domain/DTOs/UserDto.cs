@@ -20,6 +20,8 @@ namespace Domain.DTOs
         public DateTime CreationDate { get;  set; }
         public decimal Amount { get;  set; }
         public List<TransactionDto> Transactions { get; set; }
+        public bool IsBlocked { get; set; }
+        public DateTime? BlockDate { get; set; }
 
         public UserDto() { }
 
@@ -36,6 +38,8 @@ namespace Domain.DTOs
             CreationDate = user.CreationDate;
             Amount = user.Amount;
             Transactions = user.Transactions?.Select(t => new TransactionDto(t)).ToList();
+            IsBlocked = user.IsBlocked;
+            BlockDate = user.BlockDate;
         }
     }
 }

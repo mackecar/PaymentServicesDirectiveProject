@@ -30,14 +30,30 @@
 
 @if (Model.User != null)
 {
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label class="control-label">Stanje</label>
-                <input asp-for="User.Amount" class="form-control" readonly="readonly" />
-            </div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">Stanje</label>
+            <input asp-for="User.Amount" class="form-control" readonly="readonly" />
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label">Blokiran</label>
+            @if (Model.User.IsBlocked)
+            {
+                <input class="form-control" readonly="readonly" value="Da" />
+                <input class="form-control" readonly="readonly" value="@Model.User.BlockDate" />
+            }
+            else
+            {
+                <input class="form-control" readonly="readonly" value="Ne" />
+            }
+
+
+        </div>
+    </div>
+</div>
     <div class="row">
         <div class="col-md-12">
             <table class="table table-bordered">

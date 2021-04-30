@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ApplicationService.Extensions;
 using Banks.ApplicationServiceInterfaces;
 using Banks.ApplicationServiceInterfaces.DTOs;
+using Core.ApplicationService.Exceptions;
 using Domain.DTOs;
 using Domain.Entities;
 using Domain.Repositories;
@@ -102,6 +103,32 @@ namespace Core.ApplicationService
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
             User user = await GetUserByPersonalNumberAndValidate(personalNumber, userPass, unitOfWork);
             await unitOfWork.UserRepository.Delete(user);
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task BlockUser(string userPersonalNumber, string submittedAdminPass, string systemAdminPass)
+        {
+            if(submittedAdminPass != systemAdminPass) throw new UserServiceException("BlockUser - akcija vam nije dozvoljena!");
+
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+            User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(userPersonalNumber);
+            if (user == null) throw new NullReferenceException("Korisnik ne postoji!");
+            user.BlockUser();
+            await unitOfWork.UserRepository.Update(user);
+
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task UnblockUser(string userPersonalNumber, string submittedAdminPass, string systemAdminPass)
+        {
+            if (submittedAdminPass != systemAdminPass) throw new UserServiceException("UnblockUser - akcija vam nije dozvoljena!");
+
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+            User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(userPersonalNumber);
+            if (user == null) throw new NullReferenceException("Korisnik ne postoji!");
+            user.UnblockUser();
+            await unitOfWork.UserRepository.Update(user);
+
             await unitOfWork.SaveChangesAsync();
         }
     }

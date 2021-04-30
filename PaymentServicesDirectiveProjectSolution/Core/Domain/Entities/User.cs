@@ -15,7 +15,9 @@ namespace Domain.Entities
         public string BankPinNumber { get; private set; }
         public string UserPass { get; private set; }
         public DateTime CreationDate { get; private set; }
-        public decimal Amount { get; private set; } 
+        public decimal Amount { get; private set; }
+        public bool IsBlocked { get; private set; }
+        public DateTime? BlockDate { get; private set; }
 
         public List<Transaction> Transactions { get; set; }
 
@@ -36,6 +38,8 @@ namespace Domain.Entities
             SetBankPinNumber(bankPinNumber);
             CreationDate = DateTime.Now;
             Amount = 0;
+            IsBlocked = false;
+            BlockDate = null;
         }
 
         private void SetFirstName(string firstName)
@@ -104,6 +108,18 @@ namespace Domain.Entities
         public void Withdraw(decimal amount)
         {
             Amount -= amount;
+        }
+
+        public void BlockUser()
+        {
+            IsBlocked = true;
+            BlockDate = DateTime.Now;
+        }
+
+        public void UnblockUser()
+        {
+            IsBlocked = false;
+            BlockDate = null;
         }
     }
 }

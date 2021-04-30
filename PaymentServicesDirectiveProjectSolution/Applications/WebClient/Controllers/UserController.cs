@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Applications.WebClient.Models.ViewModels.UserVMS;
 using Core.ApplicationService;
 using Domain.DTOs;
+using WebClient.Helpers;
 
 namespace WebClient.Controllers
 {
@@ -75,5 +76,39 @@ namespace WebClient.Controllers
             ViewBag.Message = message;
             return View();
         }
+
+
+        public IActionResult BlockUser()
+        {
+            return View(new BlockUserVM());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BlockUser(BlockUserVM model)
+        {
+            await _userService.BlockUser(model.PersonalNumber, model.AdminPass, AdminHelper.AdminPass);
+
+            return RedirectToAction("BlockUserSuccess", new {message = $"Uspesno ste blokirali korisnika! {model.PersonalNumber}"});
+        }
+
+        public IActionResult UnblockUser()
+        {
+            return View(new BlockUserVM());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnblockUser(BlockUserVM model)
+        {
+            await _userService.UnblockUser(model.PersonalNumber, model.AdminPass, AdminHelper.AdminPass);
+
+            return RedirectToAction("BlockUserSuccess", new { message = $"Uspesno ste odblokirali korisnika! {model.PersonalNumber}" });
+        }
+
+        public IActionResult BlockUserSuccess(string message)
+        {
+            ViewBag.Message = message;
+            return View();
+        }
+
     }
 }

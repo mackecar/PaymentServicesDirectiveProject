@@ -38,6 +38,12 @@ namespace Applications.WebClient.Models.ViewModels.UserVMS
         [Display(Name = "Iznos")]
         public decimal Amount { get; set; }
 
+        [Display(Name = "Da li je korisnik blokiran?")]
+        public bool IsBlocked { get; set; }
+
+        [Display(Name = "Datum blokiranja")]
+        public DateTime? BlockDate { get; set; }
+
         public List<TransactionVM> Transactions { get; set; }
 
         public UserVM() { }
@@ -55,6 +61,8 @@ namespace Applications.WebClient.Models.ViewModels.UserVMS
             CreationDate = user.CreationDate;
             Amount = user.Amount;
             Transactions = user.Transactions?.Select(t => new TransactionVM(t)).ToList();
+            IsBlocked = user.IsBlocked;
+            BlockDate = user.BlockDate;
         }
     }
 

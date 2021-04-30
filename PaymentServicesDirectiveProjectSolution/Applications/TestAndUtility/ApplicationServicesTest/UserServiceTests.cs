@@ -133,5 +133,48 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
                 Assert.Fail("Unexpected error: " + ex.Message);
             }
         }
+
+        [TestMethod]
+        public async Task TestBlockUser()
+        {
+            try
+            {
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710066", "dummy", "160-9999-00", "1234");
+
+                await _userService.BlockUser(user.PersonalNumber, "", "");
+
+                user = await _userService.GetUserByPersonalNumber(user.PersonalNumber, user.UserPass);
+
+                Assert.AreEqual(true, user.IsBlocked, "Korisnik je blokiran");
+
+                await _userService.DeleteUserAsync(user.PersonalNumber, user.UserPass);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected error: " + ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public async Task TestUnblockUser()
+        {
+            try
+            {
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710066", "dummy", "160-9999-00", "1234");
+
+                await _userService.BlockUser(user.PersonalNumber, "", "");
+                await _userService.UnblockUser(user.PersonalNumber, "", "");
+
+                user = await _userService.GetUserByPersonalNumber(user.PersonalNumber, user.UserPass);
+
+                Assert.AreEqual(false, user.IsBlocked, "Korisnik je odblokiran");
+
+                await _userService.DeleteUserAsync(user.PersonalNumber, user.UserPass);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Unexpected error: " + ex.Message);
+            }
+        }
     }
 }
