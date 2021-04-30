@@ -85,18 +85,27 @@ namespace Core.ApplicationService
             return transaction.ToTransactionDto();
         }
 
-        public async Task<Tuple<TransactionDto,TransactionDto>> CreateUserToUserTransaction(string userPersonalNumber, string userPass,
-            decimal amount, string destinationUserPersonalNumber)
+        public async Task<Tuple<TransactionDto,TransactionDto>> CreateUserToUserTransaction(string userPersonalNumber, 
+            string userPass,
+            decimal amount, 
+            string destinationUserPersonalNumber, 
+            int maxMonthLimit)
         {
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
 
             User sourceUser = await GetUserAndValidateAsync(userPersonalNumber, userPass, unitOfWork);
             if (sourceUser.IsBlocked) throw new TransactionServiceException("CreateUserToUserTransaction - akcija nije moguca! Korisnik je blokiran!");
 
+            bool isTransactionPossibleForSourceUser =  IsTransactionPossible(sourceUser, amount, maxMonthLimit, TransactionType.PayOut);
+            if(!isTransactionPossibleForSourceUser) throw new TransactionServiceException("Soruce korisnik je premasio mesecni limi!");
+
             if (sourceUser.Amount < amount) throw new TransactionServiceException("CreateBankWithdrawTransaction - Korisnik nema dovoljno sredstava!");
 
             User destinationUser = await GetUserAndValidateAsync(destinationUserPersonalNumber, unitOfWork);
             if (destinationUser.IsBlocked) throw new TransactionServiceException("CreateUserToUserTransaction - akcija nije moguca! Korisnik je blokiran!");
+
+            bool isTransactionPossibleForDestinationUser = IsTransactionPossible(sourceUser, amount, maxMonthLimit, TransactionType.PayIn);
+            if (!isTransactionPossibleForDestinationUser) throw new TransactionServiceException("Destination korisnik je premasio mesecni limi!");
 
             decimal fee = FeeCalculator(sourceUser, amount);
 
@@ -167,6 +176,11 @@ namespace Core.ApplicationService
             if (user == null) throw new TransactionServiceException("Korisnik nije pronadjen!");
             if (user.UserPass != userPass) throw new TransactionServiceException("Korisnik nije autorizovan!");
             return user;
+        }
+
+        private bool IsTransactionPossible(User user, decimal transactionAmount,int maxMonthLimit, TransactionType transactionType)
+        {
+            return user.Transactions.Where(t=>t.TransactionType == transactionType).Sum(t => t.Amount) + transactionAmount < maxMonthLimit;
         }
 
         public async Task DeleteTransactionAsync(int transactionId)

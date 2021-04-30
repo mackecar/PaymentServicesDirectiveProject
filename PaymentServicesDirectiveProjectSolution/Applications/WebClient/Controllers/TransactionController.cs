@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Applications.WebClient.Helpers;
 using Applications.WebClient.Models.ViewModels;
 using Applications.WebClient.Models.ViewModels.TransactionVMS;
 using Core.ApplicationService;
@@ -54,7 +55,7 @@ namespace Applications.WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUserTransaction(CreateTransactionVM model)
         {
-            await _transactionService.CreateUserToUserTransaction(model.PersonalNumber, model.UserPass, model.Amount,model.DestinationPersonalNumber);
+            await _transactionService.CreateUserToUserTransaction(model.PersonalNumber, model.UserPass, model.Amount,model.DestinationPersonalNumber, BusinessRulesHelper.MaxMonthLimit);
 
             return RedirectToAction("TransactionConfirmation", new { message = "Transacija je uspesno izvrsena!" });
         }

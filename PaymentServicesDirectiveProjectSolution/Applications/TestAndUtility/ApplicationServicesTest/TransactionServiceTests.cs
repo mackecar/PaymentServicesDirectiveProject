@@ -98,7 +98,7 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
 
                 TransactionDto transaction = await _transactionService.CreateBankDepositTransaction(user1.PersonalNumber, user1.UserPass, 999);
 
-                Tuple<TransactionDto, TransactionDto> transactions = await _transactionService.CreateUserToUserTransaction(user1.PersonalNumber, user1.UserPass, 999, user2.PersonalNumber);
+                Tuple<TransactionDto, TransactionDto> transactions = await _transactionService.CreateUserToUserTransaction(user1.PersonalNumber, user1.UserPass, 999, user2.PersonalNumber,10000);
 
                 Assert.AreNotEqual(null, transactions.Item1, "Transaction must not be null");
                 Assert.AreEqual(999, transactions.Item1.Amount, "Iznos mora biti 999!");

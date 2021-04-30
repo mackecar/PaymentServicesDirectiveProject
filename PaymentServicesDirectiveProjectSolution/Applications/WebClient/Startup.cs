@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Applications.WebClient.Helpers;
 using ApplicationService;
 using Banks.ApplicationServiceInterfaces;
 using Banks.ApplicationServices;
@@ -45,6 +46,8 @@ namespace WebClient
         {
             string adminPass = Configuration["Admin:Pass"];
             AdminHelper.AdminPass = adminPass;
+            int maxMonthLimit = Convert.ToInt32(Configuration["BusinessRules:MaxMonthLimit"]);
+            BusinessRulesHelper.MaxMonthLimit = maxMonthLimit;
             services.AddTransient<PSDDbContext>();
             services.AddTransient<IUnitOfWork, EfUnitOfWork>();
             services.AddTransient<IUnitOfWorkFactory, EfUnitOfWorkFactory>();
