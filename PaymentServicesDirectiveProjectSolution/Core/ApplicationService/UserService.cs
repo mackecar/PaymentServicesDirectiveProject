@@ -54,20 +54,25 @@ namespace Core.ApplicationService
         public async Task<UserDto> GetUserByPersonalNumber(string personalNumber,string userPass)
         {
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
-            User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(personalNumber);
-            if(user == null) throw new NullReferenceException("Korisnik ne postoji!");
-            if(user.UserPass != userPass) throw new NullReferenceException("Korisnik nije autorizovan!");
-
+            User user = await GetUserByPersonalNumberAndValidate(personalNumber, userPass,unitOfWork);
 
             return user.ToUserDto();
+        }
+
+        private async Task<User> GetUserByPersonalNumberAndValidate(string personalNumber, string userPass,
+            IUnitOfWork unitOfWork)
+        {
+            User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(personalNumber);
+            if (user == null) throw new NullReferenceException("Korisnik ne postoji!");
+            if (user.UserPass != userPass) throw new NullReferenceException("Korisnik nije autorizovan!");
+
+            return user;
         }
 
         public async Task<UserDto> ChangeUserPass(string personalNumber, string oldUserPass, string newUserPass)
         {
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
-            User user = await unitOfWork.UserRepository.GetUserByPersonalNumberAsync(personalNumber);
-            if (user == null) throw new NullReferenceException("Korisnik ne postoji!");
-            if (user.UserPass != oldUserPass) throw new NullReferenceException("Korisnik nije autorizovan!");
+            User user = await GetUserByPersonalNumberAndValidate(personalNumber, oldUserPass, unitOfWork);
 
             user.SetUserPass(newUserPass);
 
@@ -90,6 +95,14 @@ namespace Core.ApplicationService
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public async Task DeleteUserAsync(string personalNumber, string userPass)
+        {
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+            User user = await GetUserByPersonalNumberAndValidate(personalNumber, userPass, unitOfWork);
+            await unitOfWork.UserRepository.Delete(user);
+            await unitOfWork.SaveChangesAsync();
         }
     }
 }

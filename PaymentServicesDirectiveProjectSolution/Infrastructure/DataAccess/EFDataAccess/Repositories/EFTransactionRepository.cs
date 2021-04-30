@@ -21,6 +21,11 @@ namespace Infrastructure.DataAccess.EFDataAccess.Repositories
             return await DbSet.Where(t => t.UserId == userId).ToListAsync();
         }
 
+        public async Task<Transaction> GetTransaction(int transactionId)
+        {
+            return await DbSet.FirstOrDefaultAsync(t => t.Id == transactionId);
+        }
+
         public async Task Insert(Transaction transaction)
         {
             await DbSet.AddAsync(transaction);

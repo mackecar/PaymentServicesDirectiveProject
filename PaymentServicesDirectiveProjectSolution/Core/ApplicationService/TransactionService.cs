@@ -49,7 +49,7 @@ namespace Core.ApplicationService
             }
             catch (Exception ex)
             {
-                throw new TransactionException($"Transver novca sa bankovnog racuna na nalog nije moguce! {ex.Message}");
+                throw new TransactionException($"CreateBankDepositTransaction - Transver novca sa bankovnog racuna na nalog nije moguce! {ex.Message}");
             }
 
             await unitOfWork.SaveChangesAsync();
@@ -84,14 +84,14 @@ namespace Core.ApplicationService
             return transaction.ToTransactionDto();
         }
 
-        public async Task<TransactionDto> CreateUserToUserTransaction(string userPersonalNumber, string userPass,
+        public async Task<Tuple<TransactionDto,TransactionDto>> CreateUserToUserTransaction(string userPersonalNumber, string userPass,
             decimal amount, string destinationUserPersonalNumber)
         {
             using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
 
             User sourceUser = await GetUserAndValidateAsync(userPersonalNumber, userPass, unitOfWork);
 
-            if(sourceUser.Amount < amount) throw new TransactionServiceException("Korisnik nema dovoljno sredstava!");
+            if(sourceUser.Amount < amount) throw new TransactionServiceException("CreateBankWithdrawTransaction - Korisnik nema dovoljno sredstava!");
 
             User destinationUser = await GetUserAndValidateAsync(destinationUserPersonalNumber, unitOfWork);
 
@@ -117,12 +117,12 @@ namespace Core.ApplicationService
 
                 await unitOfWork.CommitTransactionAsync();
 
-                return payOutTransaction.ToTransactionDto();
+                return new Tuple<TransactionDto, TransactionDto>(payOutTransaction.ToTransactionDto(),payInTransaction.ToTransactionDto());
             }
             catch (Exception ex)
             {
                 await unitOfWork.RollbackTransactionAsync();
-                throw new TransactionException($"Transver novca izmedju korisnika nije moguce! {ex.Message}");
+                throw new TransactionException($"CreateBankWithdrawTransaction - Transver novca izmedju korisnika nije moguce! {ex.Message}");
             }
         }
 
@@ -164,6 +164,15 @@ namespace Core.ApplicationService
             if (user == null) throw new TransactionServiceException("Korisnik nije pronadjen!");
             if (user.UserPass != userPass) throw new TransactionServiceException("Korisnik nije autorizovan!");
             return user;
+        }
+
+        public async Task DeleteTransactionAsync(int transactionId)
+        {
+            using IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateUnitOfWork();
+            Transaction transaction = await unitOfWork.TransactionRepository.GetTransaction(transactionId);
+            if(transaction == null) throw new TransactionServiceException("Transakcija ne postoji!");
+            await unitOfWork.TransactionRepository.Delete(transaction);
+            await unitOfWork.SaveChangesAsync();
         }
     }
 }

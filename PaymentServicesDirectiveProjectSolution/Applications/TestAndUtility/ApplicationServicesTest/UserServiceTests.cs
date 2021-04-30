@@ -48,7 +48,7 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
         {
             try
             {
-                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710064", "dummy", "160-9999-00", "1234");
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710066", "dummy", "160-9999-00", "1234");
 
                 Assert.AreNotEqual(null, user, "User must not be null");
                 Assert.AreEqual("Test", user.FirstName, "Ime mora da bude 'Test'");
@@ -57,6 +57,8 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
                 Assert.AreEqual("dummy", user.BankName, "Ime banke mora da bude 'dummy'");
                 Assert.AreEqual("160-9999-00", user.BankAccountNumber, "Broj bankovnog racuna mora da bude '160-9999-00'");
                 Assert.AreEqual("1234", user.BankPinNumber, "PIN mora da bude '1234'");
+
+                await _userService.DeleteUserAsync(user.PersonalNumber, user.UserPass);
             }
             catch (Exception ex)
             {
@@ -69,9 +71,11 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
         {
             try
             {
-                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710064", "dummy", "160-9999-00", "1234");
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710066", "dummy", "160-9999-00", "1234");
 
                 Assert.AreEqual(user, user, "Korisnik postoji!");
+
+                await _userService.DeleteUserAsync(user.PersonalNumber, user.UserPass);
             }
             catch (Exception ex)
             {
@@ -97,10 +101,13 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
         {
             try
             {
-                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710067", "dummy", "160-9999-00", "1234");
-                UserDto userDetails = await _userService.GetUserByPersonalNumber("0312985710067",user.UserPass);
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710066", "dummy", "160-9999-00", "1234");
+
+                UserDto userDetails = await _userService.GetUserByPersonalNumber(user.PersonalNumber,user.UserPass);
 
                 Assert.AreNotEqual(null, user, "User must not be null");
+
+                await _userService.DeleteUserAsync(user.PersonalNumber, user.UserPass);
             }
             catch (Exception ex)
             {
@@ -113,11 +120,13 @@ namespace Applications.TestAndUtility.ApplicationServicesTest
         {
             try
             {
-                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710068", "dummy", "160-9999-00", "1234");
+                UserDto user = await _userService.CreateUser("Test", "Test", "0312985710066", "dummy", "160-9999-00", "1234");
                 UserDto userDetails = await _userService.ChangeUserPass(user.PersonalNumber, user.UserPass,"654321");
 
                 Assert.AreNotEqual(null, user, "User must not be null");
                 Assert.AreEqual("654321", userDetails.UserPass, "Ime mora da bude '654321'");
+
+                await _userService.DeleteUserAsync(user.PersonalNumber, "654321");
             }
             catch (Exception ex)
             {

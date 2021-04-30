@@ -9,5 +9,6 @@ namespace Core.Domain.Repositories
     public interface ITransactionRepository : IRepository<Transaction>
     {
         Task<List<Transaction>> GetUsersTransactions(int userId);
+        Task<Transaction> GetTransaction(int transactionId);
     }
 }
